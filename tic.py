@@ -4,6 +4,8 @@ TTT = None
 result = None
 choices = None
 global state
+
+
 if __name__ == '__main__':
     n = int(input("Please enter size of board: "))
     k = int(input("Please enter coins required to win: "))
@@ -52,5 +54,8 @@ if __name__ == '__main__':
         # TTT.display(state)
         if TTT.terminal_test(state):
             TTT.display(state)
-            print("Player 2 wins!")
+            if TTT.utility(state, state.to_move) != 0:
+                print("Player 2 wins!")
+            else:
+                print("Game was a Draw.")
             end_state = True

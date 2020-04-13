@@ -203,28 +203,6 @@ class TicTacToe:
             len -= 1
         return len >= self.k
 
-    def play_game(self, game, *players):
-        state = game.state
-        while True:
-            for player in players:
-                move = player(self, state)
-                state = self.result(state, move)
-                if self.terminal_test(state):
-                    self.display(state)
-                    return self.utility(state, self.to_move(self.initial))
-
-
-def alpha_beta_player(state, game):
-    return alpha_beta_pruning(state, game)
-
-
-def minimax_player(state, game):
-    return basic_minimax(state, game)
-
-
-def alpha_beta_cutoff_player(state, game):
-    return alpha_beta_cutoff(state, game)
-
 
 def query_player(game, state):
     """Make a move by querying standard input."""
