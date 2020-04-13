@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 import time
 from minimax import *
-import pygame_textinput
+
 
 winner = None
 draw = False
@@ -117,7 +117,7 @@ def draw_status():
 
 
 def drawXO(row, col):
-    global TTT, Player
+    global ttt, Player
     if row == 1:
         posx = 60
     elif row == 2:
@@ -131,7 +131,7 @@ def drawXO(row, col):
     else:
         posy = SCREEN_HEIGHT / size * 2 + 60
 
-    TTT[row - 1][col - 1] = Player
+    ttt[row - 1][col - 1] = Player
     if(Player == 'X'):
         screen.blit(x_image, (posy, posx))
         Player = 'X'
@@ -165,16 +165,15 @@ def userClick():
     else:
         row = None
     # print(row,col)
-    if(row and col and TTT[row - 1][col - 1] is None):
+    if(row and col and ttt[row - 1][col - 1] is None):
         global Player
         # draw the x or o on screen
         drawXO(row, col)
-        check_win()
     return row, col
 
 
 def reset_game():
-    global TTT, winner, Player, draw
+    global ttt, winner, Player, draw
     time.sleep(3)
     Player = 'X'
     draw = False
@@ -245,8 +244,16 @@ if __name__ == "__main__":
                 elif choice == 4:
                     x, y = alpha_beta_cutoff(state, TTT, 9)
                     print("AI moves: (" + str(x) + "," + str(y) + ")")
+                drawXO(x, y)
                 state = TTT.result(state, (x, y))
                 Player = state.to_move
+                if TTT.terminal_test(state):
+                    TTT.display(state)
+                    if TTT.utility(state, state.to_move) != 0:
+                        print("Player 2 wins!")
+                    else:
+                        print("Game was a Draw.")
+                    end_state = True
                 #print(TTT.utility(state, state.to_move))
                 # print()
         pygame.display.update()
@@ -256,16 +263,5 @@ if __name__ == "__main__":
         # (x, y) = int(i.strip()) for i in raw_input().split(' ')
         # TTT.
         # move = (query_player(TTT, state))
-
-        print("current state:")
-        TTT.display(state)
-
-        print(TTT.utility(state, state.to_move))
+        #print(TTT.utility(state, state.to_move))
         # TTT.display(state)
-        if TTT.terminal_test(state):
-            TTT.display(state)
-            if TTT.utility(state, state.to_move) != 0:
-                print("Player 2 wins!")
-            else:
-                print("Game was a Draw.")
-            end_state = True
